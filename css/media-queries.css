@@ -1,0 +1,45 @@
+@media screen and (min-width: 1700px) {
+  .search-container form {
+    gap: 943px;
+  }
+}
+
+@media screen and (max-width: 1360px) {
+  .search-container form {
+    gap: 275px;
+  }
+}
+
+
+@media screen and (max-width: 1020px) {
+  .search-container form {
+    gap: 175px;
+  }
+
+  .search-container input {
+    width: 280px;
+  }
+  
+  .search-container select {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 681px) {
+  .search-container form {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .search-container input {
+    width: 100%;
+  }
+  
+  .search-container select {
+    width: 300px;
+  }
+
+  .output-container {
+    gap: 40px;
+  }
+}
