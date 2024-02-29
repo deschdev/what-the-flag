@@ -95,6 +95,7 @@ main {
   align-items: center;
   flex-wrap: wrap;
   gap: 75px;
+  height: 100vh;
   margin: 0 auto;
   padding: 45px 40px;
 }

@@ -1,4 +1,5 @@
-import { flagCardDisplay } from "./data-fill.js"
+import { flagCardDisplay } from "./data-fill.js";
+import { clearFlags } from "./clear-flags.js";
 
 // fetch by region
 export const regionFlags = async () => {
@@ -42,11 +43,4 @@ const fetchAndDisplayFlags = async (regionOutput) => {
   } catch (error) {
     console.error(`There has been an error: ${error}`);
   }
-};
-
-const clearFlags = () => {
-  // Select the container element containing the flags
-  const flagContainer = document.querySelector("#flag-output-container");
-  // Remove all child elements (flags)
-  flagContainer.innerHTML = '';
 };
