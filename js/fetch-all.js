@@ -11,7 +11,7 @@ export const fetchFlags = async () => {
     const data = await response.json();
     data.forEach(item => {
       // displays all flags
-      // console.log(item)
+      console.log(item)
       flagCardDisplay(item);
     })
   } catch (error) {
