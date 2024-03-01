@@ -1,6 +1,7 @@
 const outputContainer = document.querySelector("#flag-output-container");
 
 export const flagCardDisplay = (data) => {
+  // creating the clickable flag cards instead of sending the user to a new page
   const flagCardContainer = document.createElement("a");
   flagCardContainer.href = "#";
   flagCardContainer.className = "flag-card";
@@ -13,6 +14,7 @@ export const flagCardDisplay = (data) => {
       <h3><strong>Capital:</strong> ${data?.capital}</h3>
     </div>
   `
+  // appending the flagCardContainer to the outputContainer
   outputContainer.appendChild(flagCardContainer);
 
   // Attach event listener to open modal when flag card is clicked
@@ -59,20 +61,29 @@ const openModal = (data) => {
 };
 
 const getCurrencyInfo = (currencies) => {
+  // Extracts the first currency code from the object's keys
   const currencyCode = Object.keys(currencies)[0];
+  // Retrieves the currency information using the extracted code
   const currencyInfo = currencies[currencyCode];
+  // Returns a formatted string with currency name, code, and symbol
   return `${currencyInfo.name} (${currencyCode}), Symbol: ${currencyInfo.symbol}`;
 };
 
 const getLanguages = (languages) => {
-  return Object.values(languages).join(", ");
+  // Converts object values (language names) into an array
+  const languageNames = Object.values(languages);
+  // Joins the language names into a comma-separated string
+  return languageNames.join(", ");
 };
 
+// border countries
 const getBorderCountries = (borders) => {
+  // if there are no borders or the borders length is 0 then add none as the text
   if (!borders || borders.length === 0) {
-    return "None";
+    return "None, this country is an island.";
   }
 
+  // attempting to update the border countries abbreviated name
   const borderNames = borders.map(border => {
     const countryData = borders.find(country => country.fifa === border);
     return countryData ? `<span>${countryData.name.common}</span>` : border;

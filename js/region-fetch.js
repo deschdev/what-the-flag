@@ -7,13 +7,15 @@ export const regionFlags = async () => {
     const regionSelect = document.querySelector("#flag-region");
     // Initialize with the current value
     let regionOutput = regionSelect.value.toLowerCase();
+
+    // fetch display flags for the new region
+    await fetchAndDisplayFlags(regionOutput);
     
     regionSelect.addEventListener("change", async () => {
       //clear previous flags
       clearFlags();
       // update the region output when the select value changes
       regionOutput = regionSelect.value.toLowerCase();
-      // fetch display flags for the new region
       await fetchAndDisplayFlags(regionOutput);
     });
 
@@ -29,6 +31,12 @@ const fetchAndDisplayFlags = async (regionOutput) => {
       method: "GET"
     });
     const data = await response.json();
+
+    // validate received data
+    if (!Array.isArray(data)) {
+      throw new Error(`Invalid data received from API: ${data}`)
+    }
+
     // Filter the data based on the regionOutput
     const filteredData = data.filter(item => {
       const itemRegion = item.region.toLowerCase();
@@ -38,8 +46,9 @@ const fetchAndDisplayFlags = async (regionOutput) => {
 
     // Output the filtered items
     filteredData.forEach(item => {
-      filteredData.push(flagCardDisplay(item))
+      flagCardDisplay(item);
     });
+    
   } catch (error) {
     console.error(`There has been an error: ${error}`);
   }
