@@ -1,6 +1,8 @@
 import { flagCardDisplay } from "./data-fill.js";
 import { clearFlags } from "./clear-flags.js";
 
+// create the custom select and have the real select show below!
+
 // fetch by region
 export const regionFlags = async () => {
   try {   
@@ -48,7 +50,7 @@ const fetchAndDisplayFlags = async (regionOutput) => {
     filteredData.forEach(item => {
       flagCardDisplay(item);
     });
-    
+
   } catch (error) {
     console.error(`There has been an error: ${error}`);
   }

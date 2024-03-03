@@ -11,6 +11,8 @@ export const searchFetch = async () => {
 
       const countryNameValue = countryName.value.trim().toLowerCase(); 
 
+
+      // use the filter higher order function instead of the length
       // Check for empty search query
       if (countryNameValue === "" || countryNameValue.length < 3) {
         console.warn("Empty search query. Please enter a country name.");

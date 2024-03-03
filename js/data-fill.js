@@ -76,6 +76,7 @@ const getLanguages = (languages) => {
   return languageNames.join(", ");
 };
 
+// re-think the getBorderCountries to render button instead of a joined list of text.
 // border countries
 const getBorderCountries = (borders) => {
   // if there are no borders or the borders length is 0 then add none as the text
