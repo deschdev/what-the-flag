@@ -1,6 +1,4 @@
-import { fetchFlags } from "./js/fetch-all.js";
-import { regionFlags } from "./js/region-fetch.js";
-import { searchFetch } from "./js/search-fetch.js";
+import { fetchFlags, regionFlags, searchFetch } from "./js/fetch-all.js";
 
 const init = () => {
   fetchFlags();
