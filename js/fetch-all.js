@@ -1,9 +1,9 @@
 import { flagCardDisplay } from "./data-fill.js";
 
-// use the all api call for everything - remove the other network calls.
+// Variable to store fetched data
+let allCountriesData = null;
 
-
-// fetch all
+// Fetch all countries data
 export const fetchFlags = async () => {
   try {
     const URL = "https://restcountries.com/v3.1/all";
@@ -13,135 +13,107 @@ export const fetchFlags = async () => {
       throw new Error(`API request failed with status ${response.status}`);
     }
   
-    const data = await response.json();
+    allCountriesData = await response.json();
 
-    if (!Array.isArray(data)) {
-      throw new Error(`Invalid data received from API: ${data}`);
+    if (!Array.isArray(allCountriesData)) {
+      throw new Error(`Invalid data received from API: ${allCountriesData}`);
     }
 
-    data.forEach((item) => {
-      // displays all flags
-      console.log(item)
-      flagCardDisplay(item);
-    });
+    // Sort all countries data alphabetically by country name
+    alphaOrder(allCountriesData);
+    displayFlags(allCountriesData);
+    return allCountriesData;
   } catch (error) {
-    console.error(`Error fetching flags: ${error}`)
+    console.error(`Error fetching all countries data: ${error}`)
   }
 }
 
-// search functionality
-const form = document.querySelector("#flag-form");
-const countryName = document.querySelector("#country-search");
+export { allCountriesData };
 
+// Search functionality
+const countryName = document.querySelector("#country-search");
 export const searchFetch = async () => {
   try {
-    form.addEventListener("submit", async event => {
-      event.preventDefault();
-
+    countryName.addEventListener("input", async () => {
       const countryNameValue = countryName.value.trim().toLowerCase(); 
 
-
-      // use the filter higher order function instead of the length
-      // Check for empty search query
-      if (countryNameValue === "" || countryNameValue.length < 3) {
-        console.warn("Empty search query. Please enter a country name.");
+      if (!allCountriesData) {
+        console.error("All countries data not fetched yet.");
         return;
       }
 
-      const URL = `https://restcountries.com/v3.1/name/${countryNameValue}`;
-      const response = await fetch(URL, {
-        method: "GET"
+      // Filter data based on search query
+      const filteredData = allCountriesData.filter(item => {
+        const countryName = item.name.common.toLowerCase();
+        return countryName.startsWith(countryNameValue);
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      // Sort filtered data alphabetically by country name
+      alphaOrder(filteredData);
 
-        // validate the received data
-        if (!Array.isArray(data)) {
-          throw new Error(`Invalid data received from API: ${data}`);
-        }
-
-        if (data.length === 0) {
-          clearFlags();
-          console.log("No countries found");
-          // Note: display a message to the user
-        } else {
-          // clear previous flags and display the search results
-          clearFlags();
-          data.forEach(item => {
-            flagCardDisplay(item)
-          });
-        }
-      } else {
-        console.error("Failed to fetch country data.");
-      }
+      // Display filtered data
+      clearFlags();
+      displayFlags(filteredData);
     });
   } catch (error) {
     console.error(`There has been an error ${error}`);
   }
 };
 
-// region fetch
-// create the custom select and have the real select show below!
 
-// fetch by region
+// Region fetch
 export const regionFlags = async () => {
-  try {   
-    const regionSelect = document.querySelector("#flag-region");
-    // Initialize with the current value
-    let regionOutput = regionSelect.value.toLowerCase();
-
-    // fetch display flags for the new region
-    await fetchAndDisplayFlags(regionOutput);
-    
-    regionSelect.addEventListener("change", async () => {
-      //clear previous flags
-      clearFlags();
-      // update the region output when the select value changes
-      regionOutput = regionSelect.value.toLowerCase();
-      await fetchAndDisplayFlags(regionOutput);
-    });
-
-  } catch (error) {
-    console.error(`There has been an error: ${error}`);
-  }
-};
-
-const fetchAndDisplayFlags = async (regionOutput) => {
   try {
-    const URL = `https://restcountries.com/v3.1/region/${regionOutput}`;
-    const response = await fetch(URL, {
-      method: "GET"
+    const regionSelect = document.querySelector("#flag-region");
+
+    regionSelect.addEventListener("change", () => {
+      const regionOutput = regionSelect.value.toLowerCase();
+
+      if (!allCountriesData) {
+        console.error("All countries data not fetched yet.");
+        return;
+      }
+
+      // Filter data based on selected region
+      const filteredData = allCountriesData.filter(item => {
+        const itemRegion = item.region?.toLowerCase() || ""; // Handle cases where region is null
+        return itemRegion === regionOutput;
+      });
+
+      // Sort filtered data alphabetically by country name
+      alphaOrder(filteredData);
+
+      // Display filtered data
+      clearFlags();
+      displayFlags(filteredData);
     });
-    const data = await response.json();
-
-    // validate received data
-    if (!Array.isArray(data)) {
-      throw new Error(`Invalid data received from API: ${data}`)
-    }
-
-    // Filter the data based on the regionOutput
-    const filteredData = data.filter(item => {
-      const itemRegion = item.region.toLowerCase();
-      const selectedRegion = regionOutput.toLowerCase();
-      return itemRegion === selectedRegion;
-    });
-
-    // Output the filtered items
-    filteredData.forEach(item => {
-      flagCardDisplay(item);
-    });
-
   } catch (error) {
     console.error(`There has been an error: ${error}`);
   }
 };
 
-// clear
+// Alphabetize Flags
 
+const alphaOrder = (filteredData) => {
+  filteredData.sort((a, b) => {
+    const nameA = a.name.common.toLowerCase();
+    const nameB = b.name.common.toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+}
+
+// Clear flags
 const clearFlags = () => {
-  // Select the container element containing the flags
   const flagContainer = document.querySelector("#flag-output-container");
-  // Remove all child elements (flags)
   flagContainer.innerHTML = '';
 };
+
+// Display flags
+const displayFlags = (data) => {
+  data.forEach(item => {
+    flagCardDisplay(item);
+  });
+};
+
+// Fetch all countries data when the module is loaded
+fetchFlags();

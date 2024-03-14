@@ -139,7 +139,7 @@ main {
 /* flag modal */
 
 .modal {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100vh;
   top: 0;
@@ -168,6 +168,10 @@ main {
   gap: 112px;
 }
 
+.modal-container img {
+  border: 1px solid #F1F1F1;
+}
+
 .country-information-container h2 {
   margin-bottom: 23px;
   font-size: 32px;
@@ -194,6 +198,8 @@ main {
 }
 
 .border-countries-container span {
+  display: inline-block;
+  margin-right: 5px;
   padding: 8px;
   border-radius: 5px;
   box-shadow: 2px 2px 10px 2px #d1d1d1;
@@ -203,4 +209,28 @@ main {
 
 .hide {
   display: none;
+}
+
+/* Dark mode */
+
+.dark-mode,
+.dark-mode main,
+.dark-mode .modal {
+  background: #003841;
+  color: #F7F7F7
+}
+
+.dark-mode svg {
+  background: transparent;
+  fill: #F7F7F7;
+}
+
+.dark-mode button {
+  color: #F7F7F7;
+}
+
+.dark-mode .flag-card-text-container {
+  background-color: #24475c;
+  box-shadow: none;
+  color: #F7F7F7
 }
